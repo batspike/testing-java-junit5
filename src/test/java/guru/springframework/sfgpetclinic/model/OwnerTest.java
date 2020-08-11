@@ -5,8 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-@Tag("model")
-class OwnerTest {
+class OwnerTest implements ModelTests {
 
 	@Test
 	void nestedAssertAll() {
@@ -16,11 +15,11 @@ class OwnerTest {
 		
 		assertAll(	"Properties Test", 
 					() -> assertAll("Person Properties", 
-									() -> assertEquals("Joes", owner.getFirstName(), "First Name error"),
+									() -> assertEquals("Joe", owner.getFirstName(), "First Name error"),
 									() -> assertEquals("Buck", owner.getLastName())
 								   ),
 					() -> assertAll("Owner Properties", 
-									() -> assertEquals("Key Wests", owner.getCity()),
+									() -> assertEquals("Key West", owner.getCity()),
 									() -> assertEquals("33993908403", owner.getTelephone())
 								   )
 				 );

@@ -8,9 +8,8 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
 
-@Tag("model")
 @TestMethodOrder(OrderAnnotation.class)
-class PersonTest {
+class PersonTest implements ModelTests {
 
 	@Test
 	@Order(1)
@@ -29,8 +28,8 @@ class PersonTest {
 		Person person = new Person(1L, "Joe", "Buck");
 		
 		assertAll( "Test Props Set",
-					() -> assertEquals("Joes", person.getFirstName(), "First Name Failed"),
-					() -> assertEquals("Bucks", person.getLastName(), "Last Name Failed")
+					() -> assertEquals("Joe", person.getFirstName(), "First Name Failed"),
+					() -> assertEquals("Buck", person.getLastName(), "Last Name Failed")
 				);
 	}
 	
