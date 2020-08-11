@@ -2,6 +2,8 @@ package guru.springframework.sfgpetclinic.controllers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.Duration;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -34,4 +36,24 @@ class IndexControllerTest {
 		});
 	}
 
+	@Test
+	@Order(3)
+	@DisplayName("Assert TimeOut")
+	void testTimeOut() {
+		assertTimeout(Duration.ofMillis(100), () -> { 
+			Thread.sleep(5000); 
+			System.out.println("I am in the same Thread!");
+		});
+	}
+	
+	@Test
+	@Order(4)
+	@DisplayName("Assert Preemptive TimeOut")
+	void testPreemptiveTimeOut() {
+		assertTimeoutPreemptively(Duration.ofMillis(100), () -> { 
+			Thread.sleep(5000); 
+			System.out.println("I am in different Thread!");
+		});
+	}
+	
 }
