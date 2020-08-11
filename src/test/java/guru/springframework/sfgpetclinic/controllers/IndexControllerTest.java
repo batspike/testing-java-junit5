@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.time.Duration;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -12,6 +13,11 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.EnabledOnJre;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.JRE;
+import org.junit.jupiter.api.condition.OS;
 
 @TestMethodOrder(OrderAnnotation.class)
 class IndexControllerTest {
@@ -39,6 +45,7 @@ class IndexControllerTest {
 	}
 
 	@Test
+	@Disabled
 	@Order(3)
 	@DisplayName("Assert TimeOut")
 	void testTimeOut() {
@@ -49,6 +56,7 @@ class IndexControllerTest {
 	}
 	
 	@Test
+	@Disabled
 	@Order(4)
 	@DisplayName("Assert Preemptive TimeOut")
 	void testPreemptiveTimeOut() {
@@ -70,5 +78,88 @@ class IndexControllerTest {
 	void testAssumptionTrueAssumptionIsTrue() {
 		assumeTrue("GURU".equalsIgnoreCase("GURU"));
 	}
+	
+	
+	@Test
+	@Order(7)
+	@EnabledOnOs(OS.MAC)
+	void testMeOnMacOS() {
+		
+	}
+	
+	@Test
+	@Order(8)
+	@EnabledOnOs(OS.WINDOWS)
+	void testMeOnWindows() {
+		
+	}
+	
+	@Test
+	@Order(9)
+	@EnabledOnJre(JRE.JAVA_8)
+	void testMeOnJava8() {
+		
+	}
+	
+	@Test
+	@Order(10)
+	@EnabledOnJre(JRE.JAVA_14)
+	void testMeOnJava14() {
+		
+	}
+	
+	@Test
+	@Order(11)
+	@EnabledIfEnvironmentVariable(named="USERNAME", matches="jt")
+	void testIfUserJT() {
+		
+	}
+	
+	@Test
+	@Order(12)
+	@EnabledIfEnvironmentVariable(named="USERNAME", matches="samlau")
+	void testIfUserSamLau() {
+		
+	}
+	
+	@Test
+	@Disabled
+	void printEnvironmentProperties() {
+		Map<String,String> env = System.getenv();
+		env.forEach( (k,v) -> System.out.println(k + ":" + v) );
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
