@@ -49,5 +49,12 @@ class PersonTest implements ModelTests {
 		System.out.println(testInfo.getDisplayName() + ": " + repetitionInfo.getCurrentRepetition());
 	}
 	
+	@Tag("assignment")
+	@RepeatedTest(value=5, name="{displayName} : {currentRepetition} of {totalRepetitions}") // repeat 10 times
+	@DisplayName("My Assignment Repeated Test")
+	void myAssignmentRepeatedTest() {
+		
+	}
+	
 	
 }
