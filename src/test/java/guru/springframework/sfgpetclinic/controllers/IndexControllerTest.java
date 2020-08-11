@@ -1,10 +1,12 @@
 package guru.springframework.sfgpetclinic.controllers;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.time.Duration;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -54,6 +56,19 @@ class IndexControllerTest {
 			Thread.sleep(5000); 
 			System.out.println("I am in different Thread!");
 		});
+	}
+	
+	@Test
+	@Order(5)
+	void testAssumptionTrue() {
+		assumeTrue("GURU".equalsIgnoreCase(System.getenv("GURU_RUNTIME")));
+		// even though the above will result in false, JUnit will not treat this as a failure
+	}
+	
+	@Test
+	@Order(6)
+	void testAssumptionTrueAssumptionIsTrue() {
+		assumeTrue("GURU".equalsIgnoreCase("GURU"));
 	}
 	
 }
