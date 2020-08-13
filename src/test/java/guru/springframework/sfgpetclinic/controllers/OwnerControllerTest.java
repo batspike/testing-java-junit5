@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -39,6 +40,9 @@ class OwnerControllerTest {
 	
 	@Captor
 	ArgumentCaptor<String> stringArgumentCaptor;
+	
+	@Mock
+	Model model;
 
 	@BeforeEach
 	void setUp() {
@@ -68,9 +72,17 @@ class OwnerControllerTest {
 	void processFindFormWildcardFound() {
 		//Given
 		Owner owner = new Owner(1L,"Joe","FindMe");
-		
+
+		//define mock objects that need to be verified in the order of their invocation
+		InOrder inOrder = inOrder(ownerService, model); 
+
 		//When
-		String viewName = controller.processFindForm(owner, bindingResult, Mockito.mock(Model.class));
+		//within processFindForm the ownerService is invoke first, then follow by model
+		String viewName = controller.processFindForm(owner, bindingResult, model);
+		
+		//verify the order of invocation of the ownerService and model is same sequence as listed below
+		inOrder.verify(ownerService).findAllByLastNameLike(anyString());
+		inOrder.verify(model).addAttribute(anyString(), anyList());
 		
 		//Then
 		assertThat("%FindMe%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
@@ -110,7 +122,7 @@ class OwnerControllerTest {
 		Owner owner = new Owner(1L,"Joe","Buck");
 		
 		//When
-		String viewName = controller.processFindForm(owner, bindingResult, Mockito.mock(Model.class));
+		String viewName = controller.processFindForm(owner, bindingResult, null);
 		
 		//Then
 		assertThat("%Buck%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
