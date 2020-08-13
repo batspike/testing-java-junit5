@@ -11,7 +11,7 @@ class InLineMockTest {
 
 	@Test
 	void testInlineMock() {
-		Map mapMock = mock(Map.class); //creating a mock out of a type
+		Map mapMock = mock(Map.class); //creating a mock using inline method
 		
 		assertEquals(0, mapMock.size());
 	}
