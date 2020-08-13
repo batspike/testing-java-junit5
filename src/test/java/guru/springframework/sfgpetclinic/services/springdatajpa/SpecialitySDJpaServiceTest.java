@@ -116,4 +116,25 @@ class SpecialitySDJpaServiceTest {
 		then(specialtyRepository).should().delete(any(Speciality.class));
 	}
 	
+	@Test
+	void testDoThrow() {
+		doThrow(new RuntimeException("Boom")).when(specialtyRepository).delete(any());
+		assertThrows(RuntimeException.class, () -> specialtyRepository.delete(new Speciality()));
+		verify(specialtyRepository).delete(any());
+	}
+	
+	@Test
+	void testFindyByIdThrows() {
+		given(specialtyRepository.findById(1L)).willThrow(new RuntimeException("Boom"));
+		assertThrows(RuntimeException.class, () -> specialtyRepository.findById(1L));
+		then(specialtyRepository).should().findById(1L);
+	}
+	
+	@Test
+	void testDeleteBDD() {
+		willThrow(new RuntimeException("Boom")).given(specialtyRepository).delete(any());
+		assertThrows(RuntimeException.class, () -> specialtyRepository.delete(new Speciality()));
+		then(specialtyRepository).should().delete(any());
+	}
+	
 }
