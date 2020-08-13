@@ -82,7 +82,10 @@ class OwnerControllerTest {
 		
 		//verify the order of invocation of the ownerService and model is same sequence as listed below
 		inOrder.verify(ownerService).findAllByLastNameLike(anyString());
-		inOrder.verify(model).addAttribute(anyString(), anyList());
+		inOrder.verify(model, times(1)).addAttribute(anyString(), anyList());
+		
+		//this verify no more interaction with model object
+		verifyNoMoreInteractions(model);
 		
 		//Then
 		assertThat("%FindMe%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
@@ -100,6 +103,9 @@ class OwnerControllerTest {
 		//Then
 		assertThat("%DontFindMe%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
 		assertThat("owners/findOwners").isEqualToIgnoringCase(viewName);
+		
+		//verify no interaction with model
+		verifyZeroInteractions(model);
 	}
 	
 	@Test
