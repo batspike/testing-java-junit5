@@ -1,12 +1,7 @@
 package guru.springframework.sfgpetclinic.services.springdatajpa;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.atMost;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
@@ -32,10 +27,20 @@ class SpecialitySDJpaServiceTest {
 	// into its own service object.
 	
 	@Test
+	void testDeleteByObject() {
+		Speciality speciality = new Speciality();
+		
+		service.delete(speciality);
+		
+		verify(specialtyRepository).delete(any(Speciality.class)); //argument matching any of type Speciality
+	}
+	
+	@Test
 	void findByIdTest() {
 		Speciality speciality = new Speciality();
 		
-		when(specialtyRepository.findById(1L)).thenReturn(Optional.of(speciality));
+		when(specialtyRepository.findById(anyLong())).thenReturn(Optional.of(speciality));
+		// when finding any id of type Long, then return a speciality object
 		
 		Speciality foundSpecialty = service.findById(1L);
 		
