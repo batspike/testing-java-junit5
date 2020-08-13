@@ -1,6 +1,8 @@
 package guru.springframework.sfgpetclinic.services.springdatajpa;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
@@ -47,6 +49,22 @@ class SpecialitySDJpaServiceTest {
 		assertNotNull(foundSpecialty);
 		
 		verify(specialtyRepository).findById(1L);
+	}
+	
+	@Test
+	void findByIdBddTest() {
+		//Given
+		Speciality speciality = new Speciality();
+		given(specialtyRepository.findById(1L)).willReturn(Optional.of(speciality));// using BDD Mockito
+		
+		//When
+		Speciality foundSpeciality = service.findById(1L);
+		assertThat(foundSpeciality).isNotNull();
+		
+		//Then
+		then(specialtyRepository).should().findById(anyLong());
+		then(specialtyRepository).should(times(1)).findById(anyLong());
+		then(specialtyRepository).shouldHaveNoMoreInteractions();
 	}
 	
 	@Test
