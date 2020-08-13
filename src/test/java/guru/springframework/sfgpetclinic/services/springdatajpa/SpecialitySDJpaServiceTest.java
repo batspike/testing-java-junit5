@@ -3,8 +3,6 @@ package guru.springframework.sfgpetclinic.services.springdatajpa;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
-
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import guru.springframework.sfgpetclinic.model.Speciality;
 import guru.springframework.sfgpetclinic.repositories.SpecialtyRepository;
@@ -137,4 +137,55 @@ class SpecialitySDJpaServiceTest {
 		then(specialtyRepository).should().delete(any());
 	}
 	
+    @Test
+    void testSaveLambdaMatch() {
+        //Given
+        final String MATCH_ME = "MATCH_ME";
+        Speciality speciality = new Speciality();
+        speciality.setDescription(MATCH_ME);
+
+        Speciality savedSpecialty = new Speciality();
+        savedSpecialty.setId(1L);
+
+        //Only create a mock when the save object argument has a description that matches MATCH_ME
+        given(specialtyRepository.save(argThat(argument -> argument.getDescription().equals(MATCH_ME))))
+        															.willReturn(savedSpecialty);
+
+        //When
+        Speciality returnedSpecialty = service.save(speciality);
+
+        //Then
+        assertThat(returnedSpecialty.getId()).isEqualTo(1L);
+    }
+    
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    void testSaveLambdaNoMatch() {
+    	
+    	//Given
+    	final String MATCH_ME = "MATCH_ME";
+    	Speciality speciality = new Speciality();
+    	speciality.setDescription("Not a match");
+    	
+    	Speciality savedSpecialty = new Speciality();
+    	savedSpecialty.setId(1L);
+    	
+    	//Only create a mock when the save object argument has a description that matches MATCH_ME
+    	//Note: must set Mockito strictness level to LENIENT
+    	given(specialtyRepository.save(argThat(argument -> argument.getDescription().equals(MATCH_ME))))
+    																.willReturn(savedSpecialty);
+    	
+    	//When
+    	// this will not trigger the mock since speciality.getDescription = "Not a match"; so return null
+    	Speciality returnedSpecialty = service.save(speciality);
+    	
+    	//Then
+    	assertNull(returnedSpecialty);
+    }
+    
+    
+    
+    
+    
+    
 }
