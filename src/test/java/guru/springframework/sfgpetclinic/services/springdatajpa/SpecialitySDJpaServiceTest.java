@@ -6,8 +6,10 @@ import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,6 +30,20 @@ class SpecialitySDJpaServiceTest {
 	
 	// each of the tests below will get its own mock object which is injeccted
 	// into its own service object.
+	
+	@Test
+	void findByIdTest() {
+		Speciality speciality = new Speciality();
+		
+		when(specialtyRepository.findById(1L)).thenReturn(Optional.of(speciality));
+		
+		Speciality foundSpecialty = service.findById(1L);
+		
+		assertNotNull(foundSpecialty);
+		
+		verify(specialtyRepository).findById(1L);
+	}
+	
 	@Test
 	void testDeleteById() {
 		service.deleteById(1L);
